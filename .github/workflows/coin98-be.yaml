@@ -13,6 +13,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+      with:
+        path: coin98-be
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v2
@@ -35,6 +37,36 @@ jobs:
         REPOSITORY: coin98-be
         IMAGE_TAG: dev-${{ github.sha }}
       run: |
+        cd coin98-be
         docker build -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
         docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
 
+    - name: Checkout helm repo
+      uses: actions/checkout@v3
+      with:
+        repository: 'quoctri1/helm-coin98'
+        path: helm-coin98
+
+    - name: Update Image Version in the related HelmChart values.yaml
+      uses: fjogeleit/yaml-update-action@main
+      with:
+        valueFile: 'helm-coin98/coin98-be/values.yaml'
+        propertyPath: 'image.tag'
+        value: dev-${{ github.sha }}
+        branch: main
+        targetBranch: main
+        createPR: false
+        commitChange: false
+
+    - name: Pushes to public repository
+      id: push_directory
+      uses: cpina/github-action-push-to-another-repository@ssh-deploy-key
+      env:
+        SSH_DEPLOY_KEY: ${{ secrets.WORKFLOW_DEPLOY_KEY }}
+      with:
+        source-directory: helm-coin98/
+        destination-github-username: 'quoctri1'
+        destination-repository-name: 'helm-coin98'
+        user-email: phqtri@gmail.com
+        commit-message: Deploy dev-${{ github.sha }}
+        target-branch: main
