@@ -53,5 +53,5 @@ app.delete('/:id', async function(req, res, next) {
 })
 
 app.listen(4000, () => {
-  console.log('Server listening on http://localhost:4000 ...');
+  console.log('Server listening on http://localhost:4000 ... testing');
 });
