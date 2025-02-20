@@ -28,7 +28,7 @@ jobs:
         ls -la
         echo "${{ steps.extract_branch.outputs.branch }}"
         echo "${{ secrets.HOST }}"
-        echo "${{ env.DB_NAME }}"
+        echo "${{ vars.DB_NAME }}"
 
   build-production:
     runs-on: ubuntu-22.04
@@ -51,4 +51,4 @@ jobs:
         ls -la
         echo "${{ steps.extract_branch.outputs.branch }}"
         echo "${{ secrets.HOST }}"
-        echo "${{ env.DB_NAME }}"
+        echo "${{ vars.DB_NAME }}"
