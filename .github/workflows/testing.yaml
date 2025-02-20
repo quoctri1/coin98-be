@@ -4,7 +4,7 @@ name: Docker Image CI
 on:
   workflow_dispatch:
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "main", "develop", "test" ]
 
 jobs:
   build:
