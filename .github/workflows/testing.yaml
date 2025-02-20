@@ -23,7 +23,7 @@ jobs:
 
     - name: Testing
       shell: bash
-      run:
+      run: |
         pwd
         ls -la
         echo "${{ steps.extract_branch.outputs.branch }}"
